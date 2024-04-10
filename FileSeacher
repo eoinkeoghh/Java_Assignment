@@ -1,0 +1,63 @@
+package Assignment;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileSearcher {
+    private String searchResults;
+
+    public FileSearcher() {
+        searchResults = "";
+    }
+
+    public void searchFiles(List<String> files, String term) {
+        StringBuilder result = new StringBuilder(); // StringBuilder to store search results
+        boolean foundInAnyFile = false; // Flag to check if term is found in any file
+
+        if (files == null || files.isEmpty()) { // If no files selected
+            result.append("Please select files first.");
+        } else {
+            for (String fileName : files) { // Iterate over selected files
+                List<String> words = searchWordsWithLetters(fileName, term); // Search words with the given letter combination
+                if (!words.isEmpty()) {
+                    result.append("Found words containing '" + term + "' in " + fileName + ":\n");
+                    for (String word : words) {
+                        result.append(word).append("\n");
+                    }
+                    foundInAnyFile = true;
+                }
+            }
+
+            if (!foundInAnyFile) { // If term not found in any file
+                result.append("ERROR: Cannot find words containing '" + term + "' in any of the selected files");
+            }
+        }
+
+        searchResults = result.toString();
+    }
+
+    private List<String> searchWordsWithLetters(String fileName, String letterCombination) {
+        List<String> foundWords = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split("\\s+"); // Split line into words
+                for (String word : words) {
+                    if (word.toLowerCase().contains(letterCombination.toLowerCase())) {
+                        foundWords.add(word);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return foundWords;
+    }
+
+    public String getSearchResults() {
+        return searchResults;
+    }
+}
