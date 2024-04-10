@@ -1,19 +1,20 @@
 package Assignment;
 
+package Assignment;
+
+
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchEngine extends JFrame {
     private JTextField searchField; // Input field for entering search term
     private JTextArea resultsArea; // Area to display search results
     private JLabel selectedFilesLabel; // Label to display selected files
-    private List<String> selectedFiles; // List to store selected file paths
+    private FileSelector fileSelector; // File selector instance
+    private FileSearcher fileSearcher; // File searcher instance
 
     // Constructor to initialize the search engine GUI
     public SearchEngine() {
@@ -31,17 +32,18 @@ public class SearchEngine extends JFrame {
         searchField = new JTextField(); // Input field for search term
         JLabel searchLabel = new JLabel("Enter Search Term:"); // Label for search field
         JButton searchButton = new JButton("Search"); // Button to trigger search
-        JButton selectFilesButton = new JButton("Select Files"); // Button to select files
         resultsArea = new JTextArea(); // Area to display search results
         JScrollPane scrollPane = new JScrollPane(resultsArea); // Scroll pane for results area
         selectedFilesLabel = new JLabel("Selected Files: None"); // Label to display selected files
+        fileSelector = new FileSelector();
+        fileSearcher = new FileSearcher();
 
         // Add components to panels
         searchPanel.add(searchLabel, BorderLayout.WEST);
         searchPanel.add(searchField, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 
-        buttonPanel.add(selectFilesButton);
+        buttonPanel.add(fileSelector.getSelectFilesButton());
         buttonPanel.add(selectedFilesLabel);
 
         // Add panels to main panel
@@ -56,89 +58,9 @@ public class SearchEngine extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String searchTerm = searchField.getText();
-                searchFiles(searchTerm);
-            }
-        });
-
-        // Action listener for select files button
-        selectFilesButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                selectFiles();
-            }
-        });
-    }
-
-    // Method to select files using a file chooser dialog
-    private void selectFiles() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select Files"); // Set dialog title
-        fileChooser.setMultiSelectionEnabled(true); // Allow multiple file selection
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); // Filter for text files
-        fileChooser.setFileFilter(filter); // Apply file filter
-
-        int result = fileChooser.showOpenDialog(this); // Display file chooser dialog
-        if (result == JFileChooser.APPROVE_OPTION) { // If files selected
-            selectedFiles = new ArrayList<>(); // Initialize selectedFiles list
-            for (java.io.File file : fileChooser.getSelectedFiles()) { // Iterate over selected files
-                selectedFiles.add(file.getAbsolutePath()); // Add absolute path of each file to the list
-            }
-            selectedFilesLabel.setText("Selected Files: " + selectedFiles.size()); // Update selected files label
-        }
-    }
-
-    // Method to search the selected files for a given term
-    private void searchFiles(String term) {
-        StringBuilder result = new StringBuilder(); // StringBuilder to store search results
-        boolean foundInAnyFile = false; // Flag to check if term is found in any file
-
-        if (selectedFiles == null || selectedFiles.isEmpty()) { // If no files selected
-            result.append("Please select files first.");
-        } else {
-            for (String fileName : selectedFiles) { // Iterate over selected files
-                List<String> words = searchWordsWithLetters(fileName, term); // Search words with the given letter combination
-                if (!words.isEmpty()) {
-                    result.append("Found words containing '" + term + "' in " + fileName + ":\n");
-                    for (String word : words) {
-                        result.append(word).append("\n");
-                    }
-                    foundInAnyFile = true;
-                }
-            }
-
-            if (!foundInAnyFile) { // If term not found in any file
-                result.append("ERROR: Cannot find words containing '" + term + "' in any of the selected files");
-            }
-        }
-
-        // Display search results in text area
-        resultsArea.setText(result.toString());
-    }
-
-    // Method to search words with a given letter combination in a file
-    private List<String> searchWordsWithLetters(String fileName, String letterCombination) {
-        List<String> foundWords = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] words = line.split("\\s+"); // Split line into words
-                for (String word : words) {
-                    if (word.toLowerCase().contains(letterCombination.toLowerCase())) {
-                        foundWords.add(word);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return foundWords;
-    }
-
-    // Main method to launch the application
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                SearchEngine searchEngine = new SearchEngine(); // Create instance of SearchEngine
-                searchEngine.setVisible(true); // Make SearchEngine window visible
+                List<String> selectedFiles = fileSelector.getSelectedFiles();
+                fileSearcher.searchFiles(selectedFiles, searchTerm);
+                resultsArea.setText(fileSearcher.getSearchResults());
             }
         });
     }
