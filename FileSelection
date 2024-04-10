@@ -1,0 +1,44 @@
+package Assignment;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileSelector {
+    private JButton selectFilesButton;
+    private List<String> selectedFiles;
+
+    public FileSelector() {
+        selectFilesButton = new JButton("Select Files");
+        selectedFiles = new ArrayList<>();
+
+        selectFilesButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Select Files"); // Set dialog title
+                fileChooser.setMultiSelectionEnabled(true); // Allow multiple file selection
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); // Filter for text files
+                fileChooser.setFileFilter(filter); // Apply file filter
+
+                int result = fileChooser.showOpenDialog(null); // Display file chooser dialog
+                if (result == JFileChooser.APPROVE_OPTION) { // If files selected
+                    selectedFiles.clear(); // Clear previous selections
+                    for (java.io.File file : fileChooser.getSelectedFiles()) { // Iterate over selected files
+                        selectedFiles.add(file.getAbsolutePath()); // Add absolute path of each file to the list
+                    }
+                }
+            }
+        });
+    }
+
+    public JButton getSelectFilesButton() {
+        return selectFilesButton;
+    }
+
+    public List<String> getSelectedFiles() {
+        return selectedFiles;
+    }
+}
