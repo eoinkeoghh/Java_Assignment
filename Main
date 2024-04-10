@@ -1,0 +1,14 @@
+package Assignment;
+
+import javax.swing.*;
+
+public class Main {
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                SearchEngine searchEngine = new SearchEngine(); // Create instance of SearchEngine
+                searchEngine.setVisible(true); // Make SearchEngine window visible
+            }
+        });
+    }
+}
