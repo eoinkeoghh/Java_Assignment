@@ -1,9 +1,22 @@
-/*
-Assignment Topic: 3. My Search Engine
-Authors: Niamh Flynn (C22388461) &  Eoin Keogh (C22456452)
-*/
+package Assignment;
 
- public SearchEngine() {
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SearchEngine extends JFrame {
+    private JTextField searchField; // Input field for entering search term
+    private JTextArea resultsArea; // Area to display search results
+    private JLabel selectedFilesLabel; // Label to display selected files
+    private List<String> selectedFiles; // List to store selected file paths
+
+    // Constructor to initialize the search engine GUI
+    public SearchEngine() {
         setTitle("Search Engine"); // Set title of the window
         setSize(600, 400); // Set window size
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close application on window close
@@ -54,3 +67,79 @@ Authors: Niamh Flynn (C22388461) &  Eoin Keogh (C22456452)
             }
         });
     }
+
+    // Method to select files using a file chooser dialog
+    private void selectFiles() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select Files"); // Set dialog title
+        fileChooser.setMultiSelectionEnabled(true); // Allow multiple file selection
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt"); // Filter for text files
+        fileChooser.setFileFilter(filter); // Apply file filter
+
+        int result = fileChooser.showOpenDialog(this); // Display file chooser dialog
+        if (result == JFileChooser.APPROVE_OPTION) { // If files selected
+            selectedFiles = new ArrayList<>(); // Initialize selectedFiles list
+            for (java.io.File file : fileChooser.getSelectedFiles()) { // Iterate over selected files
+                selectedFiles.add(file.getAbsolutePath()); // Add absolute path of each file to the list
+            }
+            selectedFilesLabel.setText("Selected Files: " + selectedFiles.size()); // Update selected files label
+        }
+    }
+
+    // Method to search the selected files for a given term
+    private void searchFiles(String term) {
+        StringBuilder result = new StringBuilder(); // StringBuilder to store search results
+        boolean foundInAnyFile = false; // Flag to check if term is found in any file
+
+        if (selectedFiles == null || selectedFiles.isEmpty()) { // If no files selected
+            result.append("Please select files first.");
+        } else {
+            for (String fileName : selectedFiles) { // Iterate over selected files
+                List<String> words = searchWordsWithLetters(fileName, term); // Search words with the given letter combination
+                if (!words.isEmpty()) {
+                    result.append("Found words containing '" + term + "' in " + fileName + ":\n");
+                    for (String word : words) {
+                        result.append(word).append("\n");
+                    }
+                    foundInAnyFile = true;
+                }
+            }
+
+            if (!foundInAnyFile) { // If term not found in any file
+                result.append("ERROR: Cannot find words containing '" + term + "' in any of the selected files");
+            }
+        }
+
+        // Display search results in text area
+        resultsArea.setText(result.toString());
+    }
+
+    // Method to search words with a given letter combination in a file
+    private List<String> searchWordsWithLetters(String fileName, String letterCombination) {
+        List<String> foundWords = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] words = line.split("\\s+"); // Split line into words
+                for (String word : words) {
+                    if (word.toLowerCase().contains(letterCombination.toLowerCase())) {
+                        foundWords.add(word);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return foundWords;
+    }
+
+    // Main method to launch the application
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                SearchEngine searchEngine = new SearchEngine(); // Create instance of SearchEngine
+                searchEngine.setVisible(true); // Make SearchEngine window visible
+            }
+        });
+    }
+}
