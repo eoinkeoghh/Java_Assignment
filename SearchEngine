@@ -1,8 +1,5 @@
 package Assignment;
 
-package Assignment;
-
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +9,6 @@ import java.util.List;
 public class SearchEngine extends JFrame {
     private JTextField searchField; // Input field for entering search term
     private JTextArea resultsArea; // Area to display search results
-    private JLabel selectedFilesLabel; // Label to display selected files
     private FileSelector fileSelector; // File selector instance
     private FileSearcher fileSearcher; // File searcher instance
 
@@ -34,8 +30,7 @@ public class SearchEngine extends JFrame {
         JButton searchButton = new JButton("Search"); // Button to trigger search
         resultsArea = new JTextArea(); // Area to display search results
         JScrollPane scrollPane = new JScrollPane(resultsArea); // Scroll pane for results area
-        selectedFilesLabel = new JLabel("Selected Files: None"); // Label to display selected files
-        fileSelector = new FileSelector();
+        fileSelector = new FileSelector(); // Initialize FileSelector
         fileSearcher = new FileSearcher();
 
         // Add components to panels
@@ -43,8 +38,8 @@ public class SearchEngine extends JFrame {
         searchPanel.add(searchField, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 
+        // Add selectFilesButton to the buttonPanel
         buttonPanel.add(fileSelector.getSelectFilesButton());
-        buttonPanel.add(selectedFilesLabel);
 
         // Add panels to main panel
         mainPanel.add(searchPanel, BorderLayout.NORTH);
