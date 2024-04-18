@@ -1,10 +1,14 @@
-/* 
-The main function of the Search Engine file is to create a graphical user 
-interface that allows users to do the following: 
+*
+JAVA ASSIGNMENT: SEARCH ENGINE
+AUTHOR: Eoin Keogh (C22456452) & Niamh Flynn (C22388461)
+
+
+The main function of the Search Engine file is to create a graphical user
+interface that allows users to do the following:
 -Select files in which to search for a term
 -Enter a search term
--Click a search button to initiate the search 
--Display the search results in a text area package Assignment; 
+-Click a search button to initiate the search
+-Display the search results in a text area package Assignment;
 */
 
 package Assignment;
@@ -16,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class SearchEngine extends JFrame {
-	// Constructor to initialize the search engine GUI
+    // Constructor to initialize the search engine GUI
     private JTextField searchField;
     private JTextArea resultsArea;
     // File selector instance
@@ -26,7 +30,7 @@ public class SearchEngine extends JFrame {
 
     // Constructor to initialize the search engine GUI
     public SearchEngine() {
-    	// Window Title and size
+        // Window Title and size
         setTitle("Search Engine");
         setSize(600, 400);
         // Close application on window close
@@ -34,12 +38,12 @@ public class SearchEngine extends JFrame {
         // Close application on window close
         setLocationRelativeTo(null);
 
-        // Main panel to hold search interface components 
+        // Main panel to hold search interface components
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel searchPanel = new JPanel(new BorderLayout());
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
-        // Search field and buttons 
+        // Search field and buttons
         searchField = new JTextField();
         JLabel searchLabel = new JLabel("Enter Search Term:");
         JButton searchButton = new JButton("Search");
@@ -58,7 +62,7 @@ public class SearchEngine extends JFrame {
         // Add file selection button to the button panel
         buttonPanel.add(fileSelector.getSelectFilesButton());
 
-        // Search panel, result area, button panel 
+        // Search panel, result area, button panel
         mainPanel.add(searchPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.WEST);
@@ -69,7 +73,7 @@ public class SearchEngine extends JFrame {
         // Action listener for search button
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	 // Get search term from search field
+                // Get search term from search field
                 String searchTerm = searchField.getText();
                 List<String> selectedFiles = fileSelector.getSelectedFiles();
                 fileSearcher.searchFiles(selectedFiles, searchTerm);
