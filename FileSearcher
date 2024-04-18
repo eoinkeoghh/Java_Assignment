@@ -1,5 +1,8 @@
-/* 
-The primary function of this file is to search for specific terms within selected text files. 
+/*
+JAVA ASSIGNMENT: SEARCH ENGINE
+AUTHOR: Eoin Keogh (C22456452) & Niamh Flynn (C22388461)
+%
+The primary function of this file is to search for specific terms within selected text files.
 The results of the file search are stored, and it searches for a given term.
 If any matching words are found in a file, it appends them to the searchResults along with the file name.
 If no files are selected or no matching words are found, it appends an appropriate message.
@@ -17,11 +20,11 @@ public class FileSearcher {
     private String searchResults;
 
     public FileSearcher() {
-        searchResults = "";
+        searchResults = ""; // Initialize search results to empty string
     }
 
     public void searchFiles(List<String> files, String term) {
-    	// Store search results
+        // Store search results
         StringBuilder result = new StringBuilder();
         // Flag to check if term is found in any file
         boolean foundInAnyFile = false;
@@ -55,7 +58,7 @@ public class FileSearcher {
             while ((line = br.readLine()) != null) {
                 String[] words = line.split("\\s+"); // Split line into words
                 for (String word : words) {
-                    if (word.toLowerCase().contains(letterCombination.toLowerCase())) {
+                    if (word.toLowerCase().contains(letterCombination.toLowerCase())) { // Case-insensitive search
                         foundWords.add(word);
                     }
                 }
