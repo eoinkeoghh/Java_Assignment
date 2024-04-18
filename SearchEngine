@@ -1,3 +1,12 @@
+/* 
+The main function of the Search Engine file is to create a graphical user 
+interface that allows users to do the following: 
+-Select files in which to search for a term
+-Enter a search term
+-Click a search button to initiate the search 
+-Display the search results in a text area package Assignment; 
+*/
+
 package Assignment;
 
 import javax.swing.*;
@@ -7,41 +16,49 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class SearchEngine extends JFrame {
-    private JTextField searchField; // Input field for entering search term
-    private JTextArea resultsArea; // Area to display search results
-    private FileSelector fileSelector; // File selector instance
-    private FileSearcher fileSearcher; // File searcher instance
+	// Constructor to initialize the search engine GUI
+    private JTextField searchField;
+    private JTextArea resultsArea;
+    // File selector instance
+    private FileSelector fileSelector;
+    // File searcher instance
+    private FileSearcher fileSearcher;
 
     // Constructor to initialize the search engine GUI
     public SearchEngine() {
-        setTitle("Search Engine"); // Set title of the window
-        setSize(600, 400); // Set window size
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Close application on window close
-        setLocationRelativeTo(null); // Center the window on screen
+    	// Window Title and size
+        setTitle("Search Engine");
+        setSize(600, 400);
+        // Close application on window close
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Close application on window close
+        setLocationRelativeTo(null);
 
-        // Panels for organizing GUI components
+        // Main panel to hold search interface components 
         JPanel mainPanel = new JPanel(new BorderLayout());
         JPanel searchPanel = new JPanel(new BorderLayout());
-        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 5, 5)); // Grid layout for buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
-        // Initialize GUI components
-        searchField = new JTextField(); // Input field for search term
-        JLabel searchLabel = new JLabel("Enter Search Term:"); // Label for search field
-        JButton searchButton = new JButton("Search"); // Button to trigger search
-        resultsArea = new JTextArea(); // Area to display search results
-        JScrollPane scrollPane = new JScrollPane(resultsArea); // Scroll pane for results area
-        fileSelector = new FileSelector(); // Initialize FileSelector
+        // Search field and buttons 
+        searchField = new JTextField();
+        JLabel searchLabel = new JLabel("Enter Search Term:");
+        JButton searchButton = new JButton("Search");
+        // Area to display search results
+        resultsArea = new JTextArea();
+        JScrollPane scrollPane = new JScrollPane(resultsArea);
+        // Initialize FileSelector
+        fileSelector = new FileSelector();
         fileSearcher = new FileSearcher();
 
-        // Add components to panels
+        // Search components
         searchPanel.add(searchLabel, BorderLayout.WEST);
         searchPanel.add(searchField, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 
-        // Add selectFilesButton to the buttonPanel
+        // Add file selection button to the button panel
         buttonPanel.add(fileSelector.getSelectFilesButton());
 
-        // Add panels to main panel
+        // Search panel, result area, button panel 
         mainPanel.add(searchPanel, BorderLayout.NORTH);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         mainPanel.add(buttonPanel, BorderLayout.WEST);
@@ -52,6 +69,7 @@ public class SearchEngine extends JFrame {
         // Action listener for search button
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	 // Get search term from search field
                 String searchTerm = searchField.getText();
                 List<String> selectedFiles = fileSelector.getSelectedFiles();
                 fileSearcher.searchFiles(selectedFiles, searchTerm);
