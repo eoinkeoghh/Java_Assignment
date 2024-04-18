@@ -1,4 +1,7 @@
-/* 
+/*
+JAVA ASSIGNMENT: SEARCH ENGINE
+AUTHOR: Eoin Keogh (C22456452) & Niamh Flynn (C22388461)
+
 The primary function of this file is providing a user interface that allows users to 
 select multiple text files.
 */
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileSelector {
-	// Button for file selection
+    // Button for file selection
     private JButton selectFilesButton;
     // List to store selected files 
     private List<String> selectedFiles;
@@ -36,7 +39,7 @@ public class FileSelector {
                 if (result == JFileChooser.APPROVE_OPTION) { // If files selected
                     selectedFiles.clear(); // Clear previous selections
                     for (java.io.File file : fileChooser.getSelectedFiles()) { // Iterate over selected files
-                        selectedFiles.add(file.getAbsolutePath()); // Add absolute path of each file to the list
+                        selectedFiles.add(file.getAbsolutePath()); // lets the full path (including folders) for each selected file and adds it to the selectedFiles list.
                     }
                 }
             }
@@ -46,6 +49,11 @@ public class FileSelector {
     public JButton getSelectFilesButton() {
         return selectFilesButton;
     }
+
+    public List<String> getSelectedFiles() {
+        return selectedFiles;
+    }
+}
 
     public List<String> getSelectedFiles() {
         return selectedFiles;
