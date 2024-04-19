@@ -1,3 +1,10 @@
+/*
+JAVA ASSIGNMENT: SEARCH ENGINE
+AUTHOR: Eoin Keogh (C22456452) & Niamh Flynn (C22388461)
+
+The Main.java is responsible for running the Search Engine
+*/
+
 package Assignment;
 
 import javax.swing.*;
@@ -12,3 +19,4 @@ public class Main {
         });
     }
 }
+
